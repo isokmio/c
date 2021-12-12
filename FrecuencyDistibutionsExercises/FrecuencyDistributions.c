@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "arrayinput.h"
 #define SIZE 70
-#define LEN_WEIGTH 40
 
 typedef struct{
     int size;
@@ -189,27 +188,17 @@ int main(){
     printf("students between 65 and 85: %3.1f\n", studentsBetween*100);
     
     
-    // 2.8
-    int weigth[LEN_WEIGTH] = {
+    int weigth[25] = {
         138, 164, 150, 132, 144, 125, 149, 157,
         146, 158, 140, 147, 136, 148, 152, 144,
-        168, 126, 138, 176, 163, 200, 154, 165,
+        168, 126, 138, 176, 163, 199, 154, 165,
         146, 173, 142, 147, 135, 153, 140, 135,
         161, 145, 135, 142, 150, 156, 145, 128
     };
-    
-    DataRow data = {.total = LEN_WEIGTH, .intervals=0, .relatives=0.0};
-    order(weigth, LEN_WEIGTH);
-    int _orange = oRange(weigth, LEN_WEIGTH);
-    int _intervalw = getIntervalWidth(weigth, LEN_WEIGTH);
-    int _lowest = oLowest(weigth, LEN_WEIGTH);
 
-    data.intervals = _orange/_intervalw;
-    createClazz(&data, _lowest, _intervalw);
-    
-    printf("\n\nLowest: %i Higest: %i Range:%i Interval: %i", _lowest, oHigest(weigth, LEN_WEIGTH), _orange, _intervalw);
-    frequencies(weigth, data);
-    graphHistogram(data);
+    DataRow data;
+    order(weigth, 25);
+    int *frecuencies = frequencies(weigth, data);
 
     return 0;
 }
