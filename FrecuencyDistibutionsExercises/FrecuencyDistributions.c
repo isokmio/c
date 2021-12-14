@@ -196,9 +196,9 @@ int main(){
         161, 145, 135, 142, 150, 156, 145, 128
     };
 
-    DataRow data;
-    order(weigth, 25);
-    int *frecuencies = frequencies(weigth, data);
+    DataRow data = {.total=40};
+    order(weigth, 40);
+    int *frecuencias = frequencies(weigth, data);
 
     return 0;
 }
