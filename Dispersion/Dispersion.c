@@ -95,7 +95,6 @@ double mode(double *data, int size){
     return clazz[pos].value;
 }
 
-
 double geometric(double *data, int size){
     if(size==0) return 0.0;
     double acumulate = 1.0;
@@ -125,30 +124,54 @@ double square(double *data, int size){
     return sqrt(acumulate/size);
 }
 
-
-#define TEST_SIZE 10
-#define EPSILON 0.01
-void test(){
-    double array[10] = {2.0, 2.0, 3.0, 5.0, 5.0, 5.0, 6.0, 6.0, 8.0, 9.0};
-    double array2[7] = {3.0, 5.0, 6.0, 6.0, 7.0, 10.0, 12.0};
-    assert(mean(array, TEST_SIZE) == 5.1);
-    assert(mode(array, TEST_SIZE) == 5.0);
-    assert(median(array, TEST_SIZE) == 5.0);
-    printf("%f", fabs(square(array2, 7)));
-    //assert(fabs(harmonic(array2, 7) - 6.43) < EPSILON);
-    //assert(fabs(square(array2, 7) - 7.5)  < EPSILON);
+double *noMutableOrder(double *data, int size){
+    double *array = malloc(sizeof(double) * size);
+    for (int i = 0; i < size; i++) {
+        array[i] = data[i];
+    }
+    order(array, size);
+    return array;
 }
 
+double range(double *data, int size){
+    double *ordered = noMutableOrder(data, size);
+    return ordered[size-1] - ordered[0];
+}
+
+double meanDeviation(double *data, int size){
+    double aMean = mean(data, size);
+    double acumulate = 0.0;
+    for (int i = 0; i < size; i++) {
+        acumulate += abs(aMean - data[i]);
+    }
+    return acumulate/size;
+}
+
+double typicalDeviation(double *data, int size){
+    double aMean = mean(data, size);
+    double acumulate = 0.0;
+    for (int i = 0; i < size; i++) {
+        acumulate += pow(aMean - data[i], 2);
+    }
+    return sqrt(acumulate/size);
+}
+
+double variance(double *data, int size){
+    return pow(typicalDeviation(data, size), 2);
+}
+
+double variationCoefficient(double *data, int size){
+    return typicalDeviation(data, size)/mean(data, size);
+}
 
 #define SIZE 10
 int main(){
-    test();
-    double data[10] = {2.0, 2.0, 3.0, 5.0, 5.0, 5.0, 6.0, 6.0, 8.0, 9.0};
-    double weigths[5] = {0.1, 0.3, 1.2, 3.2, 0.9};
-    
-    printf("%3.2f  = %3.2f\n", mean(data, SIZE) - mode(data, SIZE), 3.0 * (mean(data, SIZE) - median(data, SIZE)));
-    printf("%3.2f <= %3.2f <= %3.2f\n", harmonic(data, 3), geometric(data, 3), mean(data, 3));
-    printf("%3.2f", square(data, 3));
+    double data[SIZE] = {2.0, 2.0, 3.0, 5.0, 5.0, 5.0, 6.0, 6.0, 8.0, 9.0};
+    printf("Range: %3.2f\n", range(data, SIZE));
+    printf("Mean deviation: %3.2f\n", meanDeviation(data, SIZE));
+    printf("Typical deviation: %3.2f\n", typicalDeviation(data, SIZE));
+    printf("Variance: %3.2f\n", variance(data, SIZE));
+    printf("Coefficient of variation: %3.2f ", variationCoefficient(data, SIZE));
     
     return 0;
 }
